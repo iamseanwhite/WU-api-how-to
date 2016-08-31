@@ -1,0 +1,86 @@
+body {
+    background-color: white;
+}
+
+.verticleLine {
+	position: absolute;
+	border-left: thick solid #ff0000;    
+	border-right: thick solid #ff0000;
+	width: 1240px;
+	margin-left: 20px;
+	align: center;    
+}
+
+nav {
+    background-color: blue;
+}
+h1 {
+    font-family: "Sans-serif";
+    color: #0077FF;
+    font-size: 30px
+    letter-spacing: 1px;
+    margin-left: 250px;
+    margin-right: 250px;
+}
+
+aside{
+    font-family: "Helvetica";
+    color: #0077FF;
+    size: 50px
+    letter-spacing: 1px;
+    margin-left: 250px;
+    margin-right: 250px;
+}
+
+#header { 
+    background-color: #18599b;
+    margin-top = "5px;"
+}
+
+h2 {
+    margin-left: 250px;
+    margin-right: 250px;
+    color: #005566;
+}
+
+#img{
+	margin-left: 250px;   
+}
+
+p {
+    font-family: "Helvetica";
+    margin-left: 250px;
+    margin-right: 250px;
+    line-height: 154%;
+}
+
+#exampleCode {
+    background-color: #18599b;
+    margin-left: 250px;
+    margin-right: 610px;
+    color: white;
+    font-size: 120%;
+
+}
+xmp {
+    background-color: lightgrey;
+    margin-left: 250px;
+    margin-right: 650px;
+    margin-bottom: 30px;
+    float:left;
+    overflow-y: auto;
+    height: 300px;
+    width: 900px; 
+}
+
+code {
+    background-color: lightgrey;
+    size: 40px;
+}
+
+#console {
+	margin-right: 300px;
+	margin-top: 20px;
+	float: right;
+	position: relative;
+}

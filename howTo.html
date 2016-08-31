@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<link rel="stylesheet" type="text/css" href="howTo.css">
+  </head>
+
+  <body>
+
+  	  <aside>Learning APIs: A How-To</aside>
+
+	<header id = "header" style="height: 50px;" ></header>
+
+	<nav></nav>
+
+	<h1>Weather Underground API</h1>
+
+	<h2>Introduction</h2>
+	  <p>To get started using the Weather Underground API, head over to their <a href="https://www.wunderground.com/weather/api/">API landing page</a>, 
+	  shown below:</p> 
+
+	  <img src="images/landingPage.jpg" alt="WUAPI landing page" id="img" style="margin-left:50px 0px">
+
+	  <p>The process is less than intuitive, as you may be tempted to first click "Explore My Options", rather than "Sign Up For Free". 
+	  The former will guide you through selecting your plan, filling out the information concerning your use of the API, then direct you to a 
+	  page to create an account. After verifying your email, you will then need to sign into that account and fill out the API form a second time, 
+	  as it is only effective if you are already signed into a working account. So create a free account first, then fill out the API form to 
+	  avoid running in circles. After this is completed you will be given your API key as well as the option to edit or regenerate another.</p>
+
+	<h2>Making a call</h2>
+	  <p>The documentation tab will take you to a list of API resources that are at your disposal. In order to utilize these functions it is necessary 
+	  to make an AJAX request to a specific URL for the set of data that you wish to access. Every URL will begin with "http://api.wunderground.com/api/" 
+	  and directly after this will be the API key that you obtained earlier. The rest of the URL is specific to the API resource, and will end 
+	  with the desired format of the response (JSON or XML). Take a look at the following code snippet that makes use of the "conditions" 
+	  Data Feature - specifically it calls the example URL on the documentation landing page.</p>
+
+ 	 <xmp style = "display: block;">
+      var req = new XMLHttpRequest();
+      var key = 'thisIsJustAnExampleKey123';
+      
+      document.addEventListener('DOMContentLoaded', bindButtons);
+
+      function bindButtons(){
+      	document.getElementById('Submit').addEventListener('click', function(event){
+
+	      req.open("GET", "http://api.wunderground.com/api/" + key + "/conditions/q/CA/San_Francisco.json", true);	
+
+        req.addEventListener('load',function(){
+            if(req.status >= 200 && req.status < 400){
+              var response = JSON.parse(req.responseText);
+                console.log(response);
+                document.getElementById('city').textContent = " " + response.current_observation.display_location.city;
+                document.getElementById('humidity').textContent = " " + response.current_observation.relative_humidity;
+                document.getElementById('visibility').textContent = " " + response.current_observation.visibility_mi;
+            } else {
+              console.log("Error in network request: " + request.statusText);
+            }});
+
+          req.send(null);
+
+
+            event.preventDefault();
+          })
+      }
+    </xmp>
+    <p>Here we've made an AJAX request, implemented our key as a variable for ease of use, waited for the DOM to load, tied the request 
+    to a Submit button, and loaded the desired response perameters to respective HTML elements. Notice the hierarchy of the response data, 
+    then notice the response data presented for this exmple on the WU webpage:</p>
+
+    <div id = "exampleCode" style="height: 25px;">http://api.wunderground.com/api/Your_Key/conditions/q/CA/San_Francisco.json</div>  
+    <xmp>{
+	  "response": {
+	  "version": "0.1",
+	  "termsofService": "http://www.wunderground.com/weather/api/d/terms.html",
+	  "features": {
+	  "conditions": 1
+	  }
+	  },
+	  "current_observation": {
+	  "image": {
+	  "url": "http://icons-ak.wxug.com/graphics/wu2/logo_130x80.png",
+	  "title": "Weather Underground",
+	  "link": "http://www.wunderground.com"
+	  },
+	  "display_location": {
+	  "full": "San Francisco, CA",
+	  "city": "San Francisco",
+	  "state": "CA",
+	  "state_name": "California",
+	  "country": "US",
+	  "country_iso3166": "US",
+	  "zip": "94101",
+	  "latitude": "37.77500916",
+	  "longitude": "-122.41825867",
+	  "elevation": "47.00000000"
+	  },
+	  "observation_location": {
+	  "full": "SOMA - Near Van Ness, San Francisco, California",
+	  "city": "SOMA - Near Van Ness, San Francisco",
+	  "state": "California",
+	  "country": "US",
+	  "country_iso3166": "US",
+	  "latitude": "37.773285",
+	  "longitude": "-122.417725",
+	  "elevation": "49 ft"
+	  },
+	  "estimated": {},
+	  "station_id": "KCASANFR58",
+	  "observation_time": "Last Updated on June 27, 5:27 PM PDT",
+	  "observation_time_rfc822": "Wed, 27 Jun 2012 17:27:13 -0700",
+	  "observation_epoch": "1340843233",
+	  "local_time_rfc822": "Wed, 27 Jun 2012 17:27:14 -0700",
+	  "local_epoch": "1340843234",
+	  "local_tz_short": "PDT",
+	  "local_tz_long": "America/Los_Angeles",
+	  "local_tz_offset": "-0700",
+	  "weather": "Partly Cloudy",
+	  "temperature_string": "66.3 F (19.1 C)",
+	  "temp_f": 66.3,
+	  "temp_c": 19.1,
+	  "relative_humidity": "65%",
+	  "wind_string": "From the NNW at 22.0 MPH Gusting to 28.0 MPH",
+	  "wind_dir": "NNW",
+	  "wind_degrees": 346,
+	  "wind_mph": 22.0,
+	  "wind_gust_mph": "28.0",
+	  "wind_kph": 35.4,
+	  "wind_gust_kph": "45.1",
+	  "pressure_mb": "1013",
+	  "pressure_in": "29.93",
+	  "pressure_trend": "+",
+	  "dewpoint_string": "54 F (12 C)",
+	  "dewpoint_f": 54,
+	  "dewpoint_c": 12,
+	  "heat_index_string": "NA",
+	  "heat_index_f": "NA",
+	  "heat_index_c": "NA",
+	  "windchill_string": "NA",
+	  "windchill_f": "NA",
+	  "windchill_c": "NA",
+	  "feelslike_string": "66.3 F (19.1 C)",
+	  "feelslike_f": "66.3",
+	  "feelslike_c": "19.1",
+	  "visibility_mi": "10.0",
+	  "visibility_km": "16.1",
+	  "solarradiation": "",
+	  "UV": "5",
+	  "precip_1hr_string": "0.00 in ( 0 mm)",
+	  "precip_1hr_in": "0.00",
+	  "precip_1hr_metric": " 0",
+	  "precip_today_string": "0.00 in (0 mm)",
+	  "precip_today_in": "0.00",
+	  "precip_today_metric": "0",
+	  "icon": "partlycloudy",
+	  "icon_url": "http://icons-ak.wxug.com/i/c/k/partlycloudy.gif",
+	  "forecast_url": "http://www.wunderground.com/US/CA/San_Francisco.html",
+	  "history_url": "http://www.wunderground.com/history/airport/KCASANFR58/2012/6/27/DailyHistory.html",
+	  "ob_url": "http://www.wunderground.com/cgi-bin/findweather/getForecast?query=37.773285,-122.417725"
+	  }
+	}
+	</xmp>
+    <p>With lack of proper indentation, the response text is hard to decypher, and one might deduce that to display the city of interest, 
+      they would use <code>response.display_location.city</code> but will quickly find that this does not return anything. Since this is 
+      utilizing the "condition" data feature, let's take a look at that section in the documentation, which can be accessed via the sidebar.</p>
+
+      <img src="images/conditionsPage.png" alt="Conditions" id="img" style="margin-left:50px 0px" width = "65%;">
+
+      <img src="images/console.png" align = "right" alt="Console" id="console" style="margin-left:50px 0px" width = "25%;">
+
+      <p>Here we can see the list of response fields for the conditions feature. Again we see "display_location.city" among other pieces of 
+      response data in the same vein. This is, again, misleading. To see how the response data is actually structured, let's use a familar 
+      debugging technique of printing information to the console. As you can see from the initial AJAX call in the JavaScript code above, 
+      the response text is parsed to JSON and stored in a variable called response: 
+
+      <code>var response = JSON.parse(req.responseText)</code>
+
+      And then it is logged to the console:
+
+      <code>console.log(response)</code>
+
+      . This is a great way to take a look at the entire response object, as shown here with trees expanded. We can now see that what we 
+      thought to be the root of the response tree was actually the child of "current_obervation". This means that to access the city information
+      we need to access <code>response.current_observation.display_location.city.</code> Similarly, if we wanted to know that the temperature felt like
+      in Celcius, we would access <code>response.current_observation.feelslike_c.</code> Not only is this a great way to debug, but is also 
+      very useful if you want to review every piece of data in a given call in real time, without having to assign a specific value to an 
+      HTML element. Speaking of which, let's do that. While making calls to the API is fun in its own right, it would be nice to be able to take the data we've learned how to retrieve and
+	  implement it in our own webpages. Let's take a look at what that would look like.</p>
+     
+      <h2>Making use of the API using HTML</h2>
+
+	  <p>We've already seen how we've stored the response text of our AJAX request in a variable named response and accessed individual data sets
+	  with dot notation, according to the method structure inherent in the API. Now let's look at some HTML that will build and hold the data so that it can be displayed in our own page.</p>
+      
+      <xmp>
+      <!DOCTYPE html>
+      <html>
+        <head>
+        </head>
+        <body>
+           <input type="submit" id="Submit">
+          <div>
+            <h2>Weather Parameters</h2>
+            <ul>
+              <li><span>City:</span><span id="city"></span></li>
+              <li><span>Visibility:</span><span id="visibility"></span></li>
+              <li><span>Humidity:</span><span id="humidity"></span></li>
+            </ul>
+          </div>
+          <script src="images/weatherMap.js"></script>
+        </body>
+      </html>
+       </xmp>
+       <p>Here three spans are defined that are each asigned an id that match the data that we want to give them. They will be the 
+       counterparts of the three assignments seen in the JavaScript code which are the following: 
+     <br>
+     <br>    
+     <code> 
+       document.getElementById('city').textContent = " " + response.current_observation.display_location.city;
+     </code>
+         <br>
+     <code>
+       document.getElementById('humidity').textContent = " " + response.current_observation.relative_humidity;
+     </code>
+         <br>
+     <code>
+       document.getElementById('visibility').textContent = " " + response.current_observation.feelslike_c; 
+     </code>
+        <br>
+        <br>
+      This will populate the HTML with the most up-to-date values of those parameters according to the API, which in this case, 
+      are the city name, visibility and humidity for that city: 
+
+      <img src="images/weatherReults.png" align = "right" alt="Weather Results" id="weather" style="margin-left:50px 0px" width = "20%;"></p>
+
+      <p>Now let's try another example using the astronomy data feature. 
+      Here the API does mention the hierarchy of the response fields, stating that the data is housed under the "moon_phase" parameter. 
+      This can be verified in the console. </p>
+
+      <img src="images/astronomy.png" alt="Astronomy" id="img" style="margin-left:50px 0px" width = "65%;">
+
+
+      <p> 
+
+      In this example we list the illumination percentage of the moon, the name of that phase, and the 
+      sunrise time for the location called in the request, which for this exmample is Augusta, Georgia. (Note that the data parameters may 
+      not always be correct, e.g. "percentIlluminated" is misspelled on the API description page. This can be addressed in the console, 
+      as always.)  </p>
+
+      <img src="images/astronomyHTML.png" align = "right" alt="astronomyResults" id="console" style="margin-left:50px 0px" width = "50%;">
+
+      <p>This is an example of taking more than one parameter and combining them into one output. Sunrise (and sunset) are made 
+      of separate data, namely the specific hour and minutes, and are called separately with sunrise.hour and sunset.minute. Each are 
+      concatinated in our JavaScript and mapped to the same HTML element for sunrise.</p>
+
+      <img src="images/astronomyCSS.png" align = "top" alt="astronomyResults" id="img" style="margin-left:50px 0px" width = "50%;">
+
+      <h2> Using Radar </h2>
+      <p>Next let's look at something a little different. So far we have been making an AJAX call, parsing the response text and pulling
+      from it what we wanted to use. Now we are going to look at retrieving images from the API, which will not use the response but the 
+      URL directly. First it must be noted that when trying to retrieve images from another server, you will run into an "Access-Control-Allow-Origin"
+      error without the proper header: <code>req.setRequestHeader("Access-Control-Allow-Origin", "*");</code> This may also be added via a 
+      Chrome extention as a second option. With this in mind, let's look at the code used to pull a radar image from the API.
+
+      <xmp>
+      var req = new XMLHttpRequest();
+
+      var key = 'f61b08db479e20e7'; 
+      document.addEventListener('DOMContentLoaded', bindButtons);
+
+      function bindButtons(){
+      	document.getElementById('Submit').addEventListener('click', function(event){
+
+	      req.open("GET", "http://api.wunderground.com/api/" + key + "/conditions/q/OR/Corvallis.json", true);	
+	      //req.setRequestHeader("Access-Control-Allow-Origin", "*");
+
+        req.addEventListener('load',function(){
+            if(req.status >= 200 && req.status < 400){
+              var response = JSON.parse(req.responseText);
+                console.log(response);
+                document.getElementById('city').textContent = " " + response.current_observation.display_location.city;
+                document.getElementById('temp').textContent = " " + response.current_observation.temp_f + " F";
+                document.getElementById('wind').textContent = " " + response.current_observation.wind_gust_mph + " mph";
+
+                var newImg = document.createElement("img");
+                newImg.src = "http://api.wunderground.com/api/f61b08db479e20e7/radar/q/OR/Corvallis.png?width=280&height=280&newmaps=1";
+                document.getElementById("body").appendChild(newImg);
+
+            } else {
+              console.log("Error in network request: " + request.statusText);
+            }});
+
+          req.send(null);
+
+
+            event.preventDefault();
+          })
+      }
+      </xmp>
+      <xmp>
+	<!DOCTYPE html>
+	<html>
+	  <head>
+	  </head>
+	  <body id = "body">
+	        <input type="submit" id="Submit">
+	 
+	    <div>
+	      <h2>Corvallis, OR Radar Still:</h2>
+	      <ul>
+	        <li><span>City:</span><span id="city"></span></li>
+	        <li><span>Temperature:</span><span id="temp"></span></li>
+	        <li><span>Wind Gust:</span><span id="wind"></span></li>
+	      </ul>
+	    </div>
+	    <script src="WUapi.js"></script>
+	  </body>
+	</html>					
+      </xmp>
+    <img src="images/radar.png" align = "right" alt="Console" id="console" style="margin-left:50px 0px" width = "20%;">	
+      <p> Here the AJAX call is actually just for the condition data which are the city, temperature in fahrenheit and wind gust speed in mph. 
+      To render the radar image, we use:
+      <br>
+      <br>
+      <code>
+      var newImg = document.createElement("img");
+      </code>
+      <br>
+      <code>
+      newImg.src = "http://api.wunderground.com/api/f61b08db479e20e7/radar/q/OR/Corvallis.png?width=280&height=280&newmaps=1";
+      </code>
+      <br>
+      <code>
+      document.getElementById("body").appendChild(newImg);
+      </code>
+      <br> 
+      <br>
+
+
+      This creates a new variable named newImg, and sets it equal to a new img element. The src link is then set to the API url itself,
+      without actually making an AJAX call. In the parameters the height and width of the image are set, as well as the format (png) and location,
+      (Corcallis, OR). Then the element is appended to the body of the HTML document.
+
+      <h2> End of tutorial </h2>
+
+      <p>Now that you have a better idea of how to navigate and utilize the Weather Underground API, go have fun!</p>
+
+      <script src="howTo.js"></script>
+    
+  </body>
+</html>
